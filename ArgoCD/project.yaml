@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: my-project 
+  namespace: default 
+spec:
+  description: "my microservices project" 
+  clusterResourceWhitelist:
+  - group: '*' 
+    kind: '*'
+  sourceRepos:
+  - '*' 
+  destinations:
+  - server: 'https://kubernetes.default.svc'  
+    namespace: 'default'  

@@ -1,0 +1,22 @@
+replicaCount: 1
+image:
+  repository: mysql
+  tag: latest
+  pullPolicy: IfNotPresent
+  containerPort: 3306
+  environment:
+    MYSQL_DATABASE: mydb
+    MYSQL_USER: chedi
+    MYSQL_PASSWORD: chedi
+    MYSQL_ROOT_PASSWORD: root
+
+service:
+  name: database
+  type: ClusterIP
+  port: 3306
+  targetPort: 3306
+
+
+
+ingress:
+  enabled: false

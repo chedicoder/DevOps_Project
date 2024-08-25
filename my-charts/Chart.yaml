@@ -1,0 +1,18 @@
+apiVersion: v2
+name: my-charts
+description: A Helm chart for Kubernetes
+type: application
+version: 0.1.0
+appVersion: "1.16.0"
+dependencies:
+  - name: angular-chart  
+    version: 0.1.0 
+    repository: "file://charts/angular-chart"
+  - name: nestjs-chart  
+    version: 0.1.0 
+    repository: "file://charts/nestjs-chart"  
+  - name: database-chart  
+    version: 0.1.0 
+    repository: "file://charts/database-chart"  
+   
+
