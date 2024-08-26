@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: angular
+  repository: chedi1/angular
   tag: '1.0'
   pullPolicy: IfNotPresent
   containerPort: 4000
