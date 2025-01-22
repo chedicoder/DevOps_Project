@@ -1,0 +1,21 @@
+replicaCount: 1
+image:
+  repository: chedi1/angular
+  tag: '1.0'
+  pullPolicy: IfNotPresent
+  containerPort: 4000
+
+service:
+  name: angularservice
+  type: NodePort
+  port: 4200
+  targetPort: 4000
+
+
+ingress:
+  enabled: true
+  name: angularingress
+  class: nginx
+  path: /
+  host: angular.app
+

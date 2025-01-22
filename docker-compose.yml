@@ -1,0 +1,45 @@
+services:
+  nestjs.app:
+    build: ./nestjs
+    image: nestjs:1.0
+    ports:
+      - "3000:3000"
+    environment:
+      host: database
+      port: 3306
+      username: chedi
+      password: chedi
+      database: mydb
+    depends_on:
+      - database
+    networks:
+      - mynetwork
+
+  angular-app:
+    build: ./angular
+    image: angular:1.0
+    ports:
+      - "4200:4000"
+    networks:
+      - mynetwork
+
+  database:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: chedi
+      MYSQL_PASSWORD: chedi
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+
+volumes:
+  mysql_data:
+
+networks:
+  mynetwork:
+

@@ -1,0 +1,29 @@
+replicaCount: 1
+image:
+  repository: chedi1/nestjs
+  tag: '1.0'
+  pullPolicy: IfNotPresent
+  containerPort: 3000
+  environment:
+    host: database
+    port: 3306
+    username: chedi
+    password: chedi
+    database: mydb
+ 
+
+service:
+  name: nestjs-svc
+  type: NodePort
+  port: 3000
+  targetPort: 3000
+
+
+
+ingress:
+  enabled: true
+  name: nestjsingress
+  class: nginx
+  path: /
+  host: nestjs.app  
+

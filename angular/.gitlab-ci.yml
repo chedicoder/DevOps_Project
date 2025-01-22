@@ -1,0 +1,65 @@
+stages:
+  - sonarqube-check
+  - sonarqube-vulnerability-report
+  - docker
+
+variables:
+  # SonarQube
+  projectKey: "chedicoder_project_24b06054-9425-4a91-88da-11ec4d4b883d"
+
+  # Docker
+  DOCKER_IMAGE: "angular:1.0"
+  CONTAINER_NAME: "angular"
+  TARGET_PORT: "4000"
+  CONTAINER_PORT: "4200"
+
+  # DockerHub
+  USERNAME: "chedi1"
+  TOKEN: "${DockerHub_Token}" 
+
+sonarqube-check:
+  stage: sonarqube-check
+  image: sonarsource/sonar-scanner-cli:latest
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  
+    GIT_DEPTH: "0" 
+  cache:
+    policy: pull
+    key: "${CI_COMMIT_SHORT_SHA}"
+    paths:
+      - sonar-scanner/   
+  script: 
+    - sonar-scanner
+  allow_failure: true
+
+sonarqube-vulnerability-report:
+  stage: sonarqube-vulnerability-report
+  before_script:
+  - apt-get update && apt-get install -y curl
+  script:
+    - 'curl -u "${SONAR_TOKEN}:" "${SONAR_HOST_URL}/api/issues/gitlab_sast_export?projectKey=${projectKey}&branch=${CI_COMMIT_BRANCH}&pullRequest=${CI_MERGE_REQUEST_IID}" -o gl-sast-sonar-report.json'
+  allow_failure: true
+  artifacts:
+    expire_in: 1 day
+    reports:
+      sast: gl-sast-sonar-report.json
+
+build_image:
+  stage: docker
+  image: docker:latest
+  services:
+  - docker:dind
+  script:
+    - docker build -t ${DOCKER_IMAGE} .
+    - docker rm -f ${CONTAINER_NAME} || true
+    - docker run -d --name ${CONTAINER_NAME} -p ${CONTAINER_PORT}:${TARGET_PORT} ${DOCKER_IMAGE}
+    - docker tag ${DOCKER_IMAGE} ${USERNAME}/${DOCKER_IMAGE}
+    - echo ${TOKEN} | docker login -u ${USERNAME} --password-stdin
+    - docker push ${USERNAME}/${DOCKER_IMAGE}
+
+
+
+
+    
+
+

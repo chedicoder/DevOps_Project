@@ -1,0 +1,12 @@
+dependencies:
+- name: angular-chart
+  repository: file://charts/angular-chart
+  version: 0.1.0
+- name: nestjs-chart
+  repository: file://charts/nestjs-chart
+  version: 0.1.0
+- name: database-chart
+  repository: file://charts/database-chart
+  version: 0.1.0
+digest: sha256:dcad7872cb5e51e37bcc9fc80bedaf72287026ebcdf7076226bda8f43121abc4
+generated: "2024-08-21T13:53:28.904895884+01:00"

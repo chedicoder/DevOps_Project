@@ -1,0 +1,25 @@
+- name: Start project
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update apt package
+      apt:
+        update_cache: yes
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Clone the app repository
+      git:
+        repo: 'https://github.com/chedicoder/DevOps_Project.git'
+        dest: "~/project" 
+        clone: yes
+        update: yes
+        version: main
+
+    - name: Start Docker Compose
+      command: docker compose up -d --build
+      args:
+        chdir: ~/project        
